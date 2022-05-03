@@ -1,41 +1,23 @@
 #lang racket
 
 
-(define accuracy .0001)
-
-(define (notAccurate y)
-  (> (abs y) accuracy)
-)
-
-(define (average x y)
-  (/ (+ x y) 2)
-)
-
-(define (polynomialfunc1 x)
-  ; y = 5x^2 - x - 8
-  (- (- (* 5 (* x x)) x) 8)
-)
-
-(define (polynomialfunc2 x)
-  ; y = 4x^2 -x -2
-  (- (- (* 4 (* x x)) x) 2)
-)
-
-(define (bisec function start1 start2)
-  ; Function will find the zero of a polynomial function recursively with two starting
-  ; values on oposite sides of an x axis.
-  (define ystart1 (function start1))
-  (define ystart2 (function start2))
-  
-  (if (or (notAccurate ystart1) (notAccurate ystart2)) 
-      (if (> (abs ystart1) (abs ystart2)) (bisec function start2 (average start1 start2))
-           (bisec function start1 (average start1 start2)))
-      (exact->inexact (average start1 start2))
+(define (revList items)
+  (if (null? (cdr items))
+      (first items)
+      (flatten (list* (revList (rest items)) (list (first items))))
+      )
   )
-)
 
 
-(printf "The solution of y = 5x^2 - x - 8 is ~v ~n ~n" (bisec polynomialfunc1 1 2))
+(define (oddRevList items)
+  (define oddItems (filter odd? items))
+  (revList oddItems)
+  )
 
 
-(printf "The solution of y = 4x^2 - x - 2 is ~v" (bisec polynomialfunc2 -3 0))
+; (oddRevList ‘( 1 2 3 4 5 6 7 8))   returns ‘(7 5 3 1)
+(oddRevList '(1 2 3 4 5 6 7 8))
+
+
+; (oddRevList ‘(3 5 2 3 7 1 2 3 1 8))  returns ‘(1 3 1 7 3 5 3)
+(oddRevList '(3 5 2 3 7 1 2 3 1 8))
